@@ -10,7 +10,7 @@
 // 取り漏れがありません。毎回全期間を走査し直すため、視聴回数も毎日最新に更新され、
 // 削除されたクリップは自動的にリストから消えます。
 
-import { writeFileSync } from "fs";
+import { writeFileSync, mkdirSync, rmSync } from "fs";
 
 const LOGIN = "indegnasen0706";
 const SINCE = "2022-07-01T00:00:00Z"; // チャンネル開設より前から
@@ -107,6 +107,36 @@ const clips = [...found.values()]
   }));
 
 if (clips.length === 0) { console.error("クリップが0件でした。書き込みを中止します。"); process.exit(1); }
+
+// クリップごとの共有ページ生成(XでURLを貼るとそのクリップのサムネがカードになる)
+rmSync("c", { recursive: true, force: true });
+mkdirSync("c", { recursive: true });
+const esc = (s) => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+for (const cl of clips) {
+  const title = esc(cl.title || "クリップ") + "｜huton-fan";
+  const desc = esc([cl.game, cl.creator ? "クリップ作成: " + cl.creator : ""].filter(Boolean).join(" ・ ")) || "布団ちゃんTwitchクリップまとめ(非公式)";
+  const img = esc(cl.thumb || "https://huton-fan.github.io/assets/ogp.png");
+  const dest = "../#clip/" + encodeURIComponent(cl.id);
+  writeFileSync("c/" + cl.id + ".html",
+`<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>${title}</title>
+<meta property="og:title" content="${title}">
+<meta property="og:description" content="${desc}">
+<meta property="og:type" content="video.other">
+<meta property="og:image" content="${img}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${img}">
+<meta http-equiv="refresh" content="0;url=${dest}">
+<script>location.replace(${JSON.stringify(dest)});</script>
+</head>
+<body><a href="${dest}">再生ページへ移動中…</a></body>
+</html>
+`);
+}
+console.log(`共有ページ ${clips.length}件を c/ に生成`);
 
 writeFileSync("clips.json", JSON.stringify({
   site: "hutonclips",

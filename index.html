@@ -1099,7 +1099,7 @@ class Component extends DCLogic {
         : pillStyle,
       watchFavLabel: favs.includes(cur.id) ? '♥ お気に入り済み' : '♡ お気に入り',
       onShare: () => {
-        const url = location.origin + location.pathname + '#clip/' + encodeURIComponent(cur.id);
+        const url = location.origin + location.pathname.replace(/[^/]*$/, '') + 'c/' + encodeURIComponent(cur.id) + '.html';
         try { navigator.clipboard.writeText(url); } catch (e) {}
         this.setState({ copied: true });
         clearTimeout(this.copyTimer);
