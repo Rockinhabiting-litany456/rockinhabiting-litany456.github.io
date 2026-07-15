@@ -419,7 +419,7 @@ input::placeholder { color: #8a8f99; }
         <a href="https://x.com/indegnasen210" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;background:var(--surface2,#232630);border:1px solid var(--border,#31343f);color:var(--text,#f2f3f5);border-radius:999px;padding:9px 16px;font-size:13px;font-weight:700">布団ちゃんのX ↗</a>
       </div>
       <p style="margin:8px 0 0;font-size:13.5px;line-height:1.95;color:var(--text,#f2f3f5)">掲載内容に問題がある場合(権利者の方・ご本人からの削除のご依頼など)や、サイトへのご要望は、下記までご連絡ください。確認のうえ、速やかに対応いたします。</p>
-      <p style="margin:0;font-size:12.5px;color:var(--text2,#9aa0ad)">管理者: <a href="https://x.com/nitouqq" target="_blank" rel="noopener" style="color:var(--text2,#9aa0ad);text-decoration:underline">X @nitouqq</a> ・ <a href="/cdn-cgi/l/email-protection#cba5a2bfa4bebaba8baca6aaa2a7e5a8a4a6" style="color:var(--text2,#9aa0ad);text-decoration:underline"><span class="__cf_email__" data-cfemail="26484f524953575766414b474f4a0845494b">[email&#160;protected]</span></a></p>
+      <p style="margin:0;font-size:12.5px;color:var(--text2,#9aa0ad)">管理者: <a href="https://x.com/nitouqq" target="_blank" rel="noopener" style="color:var(--text2,#9aa0ad);text-decoration:underline">X @nitouqq</a> ・ <a href="{{ adminMailHref }}" style="color:var(--text2,#9aa0ad);text-decoration:underline">{{ adminMail }}</a></p>
       <p style="margin:14px 0 0;font-size:11.5px;line-height:1.8;color:var(--text2,#9aa0ad)">本サイトは布団ちゃんご本人および関係者とは無関係の個人運営です。TwitchはTwitch Interactive, Inc.の商標です。</p>
     </section>
   </sc-if>
@@ -446,7 +446,7 @@ input::placeholder { color: #8a8f99; }
   </footer>
 </div>
 </x-dc>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/x-dc" data-dc-script data-props="{
+<script type="text/x-dc" data-dc-script data-props="{
   &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#EB550C&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#EB550C&quot;, &quot;#9146FF&quot;, &quot;#00A98F&quot;, &quot;#4C7DFF&quot;], &quot;section&quot;: &quot;テーマ&quot; },
   &quot;cardMin&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 300, &quot;min&quot;: 240, &quot;max&quot;: 380, &quot;step&quot;: 10, &quot;unit&quot;: &quot;px&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;レイアウト&quot; },
   &quot;autoplay&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;再生&quot; }
@@ -1079,6 +1079,8 @@ class Component extends DCLogic {
       isWatch: view === 'watch',
       isAbout: view === 'about',
       onAbout: () => this.setView('about'),
+      adminMail: ['nitouqq', 'gmail.com'].join('@'),
+      adminMailHref: 'mailto:' + ['nitouqq', 'gmail.com'].join('@'),
       navHomeStyle: navStyle(view === 'home'),
       navRankStyle: navStyle(view === 'rank'),
       onNavHome: () => this.setView('home'),
