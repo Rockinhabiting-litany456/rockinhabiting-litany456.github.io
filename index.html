@@ -362,7 +362,7 @@ input::placeholder { color: #8a8f99; }
 <script type="text/x-dc" data-dc-script data-props="{
   &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#EB550C&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#EB550C&quot;, &quot;#9146FF&quot;, &quot;#00A98F&quot;, &quot;#4C7DFF&quot;], &quot;section&quot;: &quot;テーマ&quot; },
   &quot;cardMin&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 300, &quot;min&quot;: 240, &quot;max&quot;: 380, &quot;step&quot;: 10, &quot;unit&quot;: &quot;px&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;レイアウト&quot; },
-  &quot;autoplay&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;再生&quot; }
+  &quot;autoplay&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;再生&quot; }
 }">
 class Component extends DCLogic {
   state = {
@@ -1030,7 +1030,7 @@ class Component extends DCLogic {
         : false,
 
       playerSrc: cur.id
-        ? 'https://clips.twitch.tv/embed?clip=' + encodeURIComponent(cur.id) + '&parent=' + host + '&autoplay=' + (autoplay ? 'true' : 'false')
+        ? 'https://clips.twitch.tv/embed?clip=' + encodeURIComponent(cur.id) + '&parent=' + host + '&autoplay=' + (autoplay ? 'true' : 'false') + '&muted=false'
         : '',
       embedHint: onGithub ? false : '※この環境ではTwitchの仕様によりプレーヤーが動かない場合があります。GitHub Pages公開後のサイトでは再生できます。',
       watchTitle: cur.title || '(無題クリップ)',
