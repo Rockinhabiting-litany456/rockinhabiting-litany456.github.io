@@ -1086,7 +1086,7 @@ class Component extends DCLogic {
         : pillStyle,
       watchFavLabel: favs.includes(cur.id) ? '♥ お気に入り済み' : '♡ お気に入り',
       onShare: () => {
-        const url = 'https://www.twitch.tv/indegnasen0706/clip/' + cur.id;
+        const url = location.origin + location.pathname + '#clip/' + encodeURIComponent(cur.id);
         try { navigator.clipboard.writeText(url); } catch (e) {}
         this.setState({ copied: true });
         clearTimeout(this.copyTimer);
