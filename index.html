@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="firebase-config.js"></script>
+<style>
+html, body { margin: 0; padding: 0; background: #15161c; }
+body { font-family: 'Noto Sans JP', sans-serif; }
+a { color: #ff9166; text-decoration: none; }
+a:hover { color: #ffb08f; }
+input, button, select { font-family: inherit; }
+input::placeholder { color: #8a8f99; }
+::-webkit-scrollbar { width: 10px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #35353c; border-radius: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+@keyframes shimmer { 0% { opacity: .45; } 50% { opacity: 1; } 100% { opacity: .45; } }
+</style>
+</helmet>
+<div style="{{ rootStyle }}">
+
+  <header style="position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:14px;padding:9px 24px;background:var(--bg,#0e0e10);border-bottom:1px solid var(--border,#303036)">
+    <button onClick="{{ onNavHome }}" title="ホームへ" style="display:flex;align-items:center;gap:9px;background:none;border:none;cursor:pointer;padding:4px 2px">
+      <img src="assets/hutonclips-icon.png" alt="布団ちゃんシルエット" style="width:38px;height:38px;display:block;flex:0 0 auto">
+      <span style="font-size:21px;font-weight:900;letter-spacing:-0.5px;color:var(--text,#efeff1)">huton<span style="color:var(--accent,#9146FF)">-fan</span></span>
+      <span style="font-size:10.5px;font-weight:700;color:var(--text2,#adadb8);border:1px solid var(--border,#303036);border-radius:5px;padding:2px 6px;letter-spacing:.5px">非公式</span>
+    </button>
+    <nav style="display:flex;gap:6px">
+      <button onClick="{{ onNavHome }}" style="{{ navHomeStyle }}">ホーム</button>
+      <button onClick="{{ onNavRank }}" style="{{ navRankStyle }}">ランキング</button>
+    </nav>
+    <div style="flex:1;display:flex;justify-content:center">
+      <div style="display:flex;align-items:center;gap:11px;width:min(480px,100%);background:var(--surface2,#1f1f23);border:1px solid var(--border,#303036);border-radius:999px;padding:0 18px">
+        <span style="position:relative;width:16px;height:16px;flex:0 0 auto">
+          <span style="position:absolute;left:0;top:0;width:9px;height:9px;border:2px solid var(--text2,#adadb8);border-radius:50%"></span>
+          <span style="position:absolute;left:11px;top:11px;width:7px;height:2px;background:var(--text2,#adadb8);border-radius:2px;transform:rotate(45deg);transform-origin:0 50%"></span>
+        </span>
+        <input ref="{{ searchRef }}" value="{{ query }}" onInput="{{ onQuery }}" placeholder="クリップを検索(タイトル・ゲーム名・作成者)" style="flex:1;background:transparent;border:none;outline:none;color:var(--text,#efeff1);font-size:14px;padding:10px 0">
+      </div>
+    </div>
+    <button onClick="{{ onTheme }}" style="flex:0 0 auto;background:var(--surface2,#1f1f23);border:1px solid var(--border,#303036);color:var(--text,#efeff1);border-radius:999px;padding:8px 14px;font-size:12.5px;font-weight:600;cursor:pointer">{{ themeLabel }}</button>
+  </header>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <section data-screen-label="ホーム(クリップ一覧)">
+      <sc-if value="{{ sampleNotice }}" hint-placeholder-val="{{ false }}">
+        <div style="margin:14px 24px 0;padding:12px 16px;border:1px solid var(--border,#303036);border-radius:10px;background:var(--surface2,#1f1f23);color:var(--text,#efeff1);font-size:13px;line-height:1.7"><strong style="color:var(--accent,#9146FF)">セットアップ待ち:</strong> {{ sampleNotice }}</div>
+      </sc-if>
+      <div style="position:sticky;top:56px;z-index:90;display:flex;align-items:center;gap:12px;padding:12px 24px;background:var(--bg,#0e0e10)">
+        <div style="flex:1;min-width:0;display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none">
+          <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
+            <button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <button onClick="{{ onHomePeriod }}" style="{{ homePeriodStyle }}">期間指定</button>
+        <sc-if value="{{ homeCustom }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:0 0 auto;display:flex;align-items:center;gap:6px">
+            <select value="{{ homeFrom }}" onChange="{{ onHomeFrom }}" style="background:var(--surface2,#1f1f23);color:var(--text,#efeff1);border:1px solid var(--border,#303036);border-radius:9px;padding:7px 8px;font-size:13px;font-weight:600;cursor:pointer;outline:none">
+              <sc-for list="{{ monthOpts }}" as="m" hint-placeholder-count="3">
+                <option value="{{ m.v }}">{{ m.label }}</option>
+              </sc-for>
+            </select>
+            <span style="color:var(--text2,#adadb8);font-size:13px">〜</span>
+            <select value="{{ homeTo }}" onChange="{{ onHomeTo }}" style="background:var(--surface2,#1f1f23);color:var(--text,#efeff1);border:1px solid var(--border,#303036);border-radius:9px;padding:7px 8px;font-size:13px;font-weight:600;cursor:pointer;outline:none">
+              <sc-for list="{{ monthOpts }}" as="m" hint-placeholder-count="3">
+                <option value="{{ m.v }}">{{ m.label }}</option>
+              </sc-for>
+            </select>
+          </div>
+        </sc-if>
+        <span style="flex:0 0 auto;font-size:12px;color:var(--text2,#adadb8)">{{ countLabel }}</span>
+        <select value="{{ sort }}" onChange="{{ onSort }}" style="flex:0 0 auto;background:var(--surface2,#1f1f23);color:var(--text,#efeff1);border:1px solid var(--border,#303036);border-radius:9px;padding:7px 10px;font-size:13px;font-weight:600;cursor:pointer;outline:none">
+          <option value="hot">おすすめ</option>
+          <option value="new">新着順</option>
+          <option value="old">古い順</option>
+          <option value="views">再生数順</option>
+          <option value="good">Good順</option>
+        </select>
+      </div>
+
+      <sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:26px 16px;padding:20px 24px 48px">
+          <sc-for list="{{ skels }}" as="s" hint-placeholder-count="8">
+            <div style="display:flex;flex-direction:column;gap:10px;animation:shimmer 1.6s ease-in-out infinite">
+              <div style="aspect-ratio:16/9;border-radius:12px;background:var(--surface2,#1f1f23)"></div>
+              <div style="height:15px;border-radius:6px;background:var(--surface2,#1f1f23);width:85%"></div>
+              <div style="height:12px;border-radius:6px;background:var(--surface2,#1f1f23);width:50%"></div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ ready }}" hint-placeholder-val="{{ false }}">
+        <div ref="{{ gridRef }}" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:26px 16px;padding:20px 24px 8px">
+          <sc-for list="{{ grid }}" as="v" hint-placeholder-count="6">
+            <article onClick="{{ v.onOpen }}" style="cursor:pointer;display:flex;flex-direction:column;gap:10px;min-width:0">
+              <div style="position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--surface2,#1f1f23)">
+                <img src="{{ v.thumb }}" onError="{{ v.onThumbErr }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+                <sc-if value="{{ v.durLabel }}" hint-placeholder-val="{{ false }}">
+                  <span style="position:absolute;right:8px;bottom:8px;background:rgba(10,10,14,0.8);color:#ffffff;font-size:11.5px;font-weight:700;padding:2px 7px;border-radius:5px">{{ v.durLabel }}</span>
+                </sc-if>
+                <sc-if value="{{ v.isNew }}" hint-placeholder-val="{{ false }}">
+                  <span style="position:absolute;left:8px;top:8px;background:var(--accent,#9146FF);color:#ffffff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;letter-spacing:.5px">NEW</span>
+                </sc-if>
+                <button onClick="{{ v.onFav }}" title="お気に入り" style="{{ v.favStyle }}">{{ v.favIcon }}</button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:4px;padding:0 2px">
+                <h3 style="margin:0;font-size:15px;font-weight:500;line-height:1.45;color:var(--text,#efeff1);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ v.title }}</h3>
+                <span style="font-size:12.5px;color:var(--text2,#adadb8)">{{ v.meta1 }}</span>
+                <div style="display:flex;align-items:center;gap:11px;font-size:12px;color:var(--text2,#adadb8);flex-wrap:wrap">
+                  <span>{{ v.viewsLabel }}</span>
+                  <sc-if value="{{ v.hasGood }}" hint-placeholder-val="{{ false }}">
+                    <span style="display:flex;align-items:center;gap:4px;color:#2FAD62"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex:0 0 auto"><path d="M1 21h4V9H1v12zM23 10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg><span style="color:var(--text2,#adadb8)">{{ v.goodCount }}</span></span>
+                  </sc-if>
+                  <sc-if value="{{ v.hasBad }}" hint-placeholder-val="{{ false }}">
+                    <span style="display:flex;align-items:center;gap:4px;color:#6C8EE3"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex:0 0 auto"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg><span style="color:var(--text2,#adadb8)">{{ v.badCount }}</span></span>
+                  </sc-if>
+                  <sc-if value="{{ v.hasQ }}" hint-placeholder-val="{{ false }}">
+                    <span style="display:flex;align-items:center;gap:4px"><span style="color:#F5A623;font-weight:900;display:inline-block;transform:rotate(-8deg)">?</span><span>{{ v.qCount }}</span></span>
+                  </sc-if>
+                  <sc-if value="{{ v.hasXq }}" hint-placeholder-val="{{ false }}">
+                    <span style="display:flex;align-items:center;gap:4px"><span style="color:#E5484D;font-weight:900;display:inline-block;transform:rotate(-8deg)">!?</span><span>{{ v.xqCount }}</span></span>
+                  </sc-if>
+                  <sc-if value="{{ v.hasMu }}" hint-placeholder-val="{{ false }}">
+                    <span style="display:flex;align-items:center;gap:4px"><span style="color:#D6409F;font-weight:900;display:inline-block;transform:rotate(-8deg)">♪</span><span>{{ v.muCount }}</span></span>
+                  </sc-if>
+                </div>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+        <sc-if value="{{ hasMore }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;justify-content:center;padding:8px 24px 40px">
+            <button onClick="{{ onMore }}" style="background:var(--surface2,#1f1f23);border:1px solid var(--border,#303036);color:var(--text,#efeff1);border-radius:999px;padding:10px 26px;font-size:13.5px;font-weight:700;cursor:pointer">もっと見る({{ remainLabel }})</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ emptyMsg }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:70px 24px 90px;text-align:center;color:var(--text2,#adadb8);font-size:14.5px">{{ emptyMsg }}</div>
+        </sc-if>
+      </sc-if>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isRank }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="ランキング" style="padding:22px 24px 56px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <button onClick="{{ onRankWeek }}" style="{{ rankWeekStyle }}">週間(過去7日)</button>
+        <button onClick="{{ onRankMonth }}" style="{{ rankMonthStyle }}">月間(過去30日)</button>
+        <button onClick="{{ onRankCustom }}" style="{{ rankCustomStyle }}">期間指定</button>
+        <sc-if value="{{ isCustom }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:8px;margin-left:6px">
+            <select value="{{ rankFrom }}" onChange="{{ onRankFrom }}" style="background:var(--surface2,#1f1f23);color:var(--text,#efeff1);border:1px solid var(--border,#303036);border-radius:9px;padding:7px 10px;font-size:13px;font-weight:600;cursor:pointer;outline:none">
+              <sc-for list="{{ monthOpts }}" as="m" hint-placeholder-count="3">
+                <option value="{{ m.v }}">{{ m.label }}</option>
+              </sc-for>
+            </select>
+            <span style="color:var(--text2,#adadb8);font-size:13px">〜</span>
+            <select value="{{ rankTo }}" onChange="{{ onRankTo }}" style="background:var(--surface2,#1f1f23);color:var(--text,#efeff1);border:1px solid var(--border,#303036);border-radius:9px;padding:7px 10px;font-size:13px;font-weight:600;cursor:pointer;outline:none">
+              <sc-for list="{{ monthOpts }}" as="m" hint-placeholder-count="3">
+                <option value="{{ m.v }}">{{ m.label }}</option>
+              </sc-for>
+            </select>
+          </div>
+        </sc-if>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:26px 16px;margin-top:20px">
+        <sc-for list="{{ rankRows }}" as="r" hint-placeholder-count="6">
+          <article onClick="{{ r.onOpen }}" style="cursor:pointer;display:flex;flex-direction:column;gap:10px;min-width:0">
+            <div style="position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--surface2,#1f1f23)">
+              <img src="{{ r.thumb }}" onError="{{ r.onThumbErr }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+              <sc-if value="{{ r.durLabel }}" hint-placeholder-val="{{ false }}">
+                <span style="position:absolute;right:8px;bottom:8px;background:rgba(10,10,14,0.8);color:#ffffff;font-size:11.5px;font-weight:700;padding:2px 7px;border-radius:5px">{{ r.durLabel }}</span>
+              </sc-if>
+              <span style="{{ r.badgeStyle }}">{{ r.num }}</span>
+              <button onClick="{{ r.onFav }}" title="お気に入り" style="{{ r.favStyle }}">{{ r.favIcon }}</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;padding:0 2px">
+              <h3 style="margin:0;font-size:15px;font-weight:500;line-height:1.45;color:var(--text,#efeff1);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ r.title }}</h3>
+              <span style="font-size:12.5px;color:var(--text2,#adadb8)">{{ r.meta1 }}</span>
+              <div style="display:flex;align-items:center;gap:11px;font-size:12px;color:var(--text2,#adadb8);flex-wrap:wrap">
+                <span>{{ r.viewsLabel }}</span>
+                <sc-if value="{{ r.hasGood }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:4px;color:#2FAD62"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex:0 0 auto"><path d="M1 21h4V9H1v12zM23 10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg><span style="color:var(--text2,#adadb8)">{{ r.goodCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasBad }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:4px;color:#6C8EE3"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex:0 0 auto"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg><span style="color:var(--text2,#adadb8)">{{ r.badCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasQ }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:4px"><span style="color:#F5A623;font-weight:900;display:inline-block;transform:rotate(-8deg)">?</span><span>{{ r.qCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasXq }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:4px"><span style="color:#E5484D;font-weight:900;display:inline-block;transform:rotate(-8deg)">!?</span><span>{{ r.xqCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasMu }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:4px"><span style="color:#D6409F;font-weight:900;display:inline-block;transform:rotate(-8deg)">♪</span><span>{{ r.muCount }}</span></span>
+                </sc-if>
+              </div>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+      <sc-if value="{{ rankEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:60px 24px;text-align:center;color:var(--text2,#adadb8);font-size:14.5px">{{ rankEmpty }}</div>
+      </sc-if>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isWatch }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="視聴ページ" style="max-width:1660px;margin:0 auto;padding:18px 24px 56px;display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,400px);gap:26px;align-items:start">
+      <div style="min-width:0">
+        <div style="width:min(100%, max(560px, calc((100vh - 250px) * 1.7778)));margin:0 auto">
+          <div style="aspect-ratio:16/9;background:#000000;border-radius:12px;overflow:hidden;box-shadow:0 10px 34px var(--shadow,rgba(0,0,0,.55))">
+            <iframe src="{{ playerSrc }}" title="Twitch クリッププレーヤー" allow="autoplay; fullscreen" allowfullscreen="true" style="width:100%;height:100%;border:0;display:block"></iframe>
+          </div>
+        </div>
+        <sc-if value="{{ embedHint }}" hint-placeholder-val="{{ false }}">
+          <p style="margin:8px 2px 0;font-size:12px;color:var(--text2,#adadb8)">{{ embedHint }}</p>
+        </sc-if>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px">
+          <sc-if value="{{ watchHasGood }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onGood }}" title="Good" style="{{ goodStyle }}"><span style="{{ goodIconStyle }}"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex:0 0 auto"><path d="M1 21h4V9H1v12zM23 10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg></span>{{ goodLabel }}</button>
+          </sc-if>
+          <sc-if value="{{ watchHasBad }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onBad }}" title="Bad" style="{{ badStyle }}"><span style="{{ badIconStyle }}"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex:0 0 auto"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg></span>{{ badLabel }}</button>
+          </sc-if>
+          <sc-if value="{{ watchHasQ }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onQ }}" title="疑問" style="{{ qStyle }}"><span style="{{ qGlyphStyle }}">?</span>{{ qLabel }}</button>
+          </sc-if>
+          <sc-if value="{{ watchHasXq }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onXq }}" title="驚き" style="{{ xqStyle }}"><span style="{{ xqGlyphStyle }}">!?</span>{{ xqLabel }}</button>
+          </sc-if>
+          <sc-if value="{{ watchHasMu }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onMu }}" title="音ネタ" style="{{ muStyle }}"><span style="{{ muGlyphStyle }}">♪</span>{{ muLabel }}</button>
+          </sc-if>
+          <button onClick="{{ onTogglePicker }}" title="リアクションを追加" style="{{ plusStyle }}">＋</button>
+        </div>
+        <sc-if value="{{ pickerOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 12px;border:1px solid var(--border,#303036);border-radius:999px;background:var(--surface2,#1f1f23);width:fit-content">
+            <button onClick="{{ onPickGood }}" title="Good" style="{{ pickGoodStyle }}"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" style="flex:0 0 auto"><path d="M1 21h4V9H1v12zM23 10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg></button>
+            <button onClick="{{ onPickBad }}" title="Bad" style="{{ pickBadStyle }}"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" style="flex:0 0 auto"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg></button>
+            <button onClick="{{ onPickQ }}" title="疑問" style="{{ pickQStyle }}"><span style="display:inline-block;transform:rotate(-8deg)">?</span></button>
+            <button onClick="{{ onPickXq }}" title="驚き" style="{{ pickXqStyle }}"><span style="display:inline-block;transform:rotate(-8deg)">!?</span></button>
+            <button onClick="{{ onPickMu }}" title="音ネタ" style="{{ pickMuStyle }}"><span style="display:inline-block;transform:rotate(-8deg)">♪</span></button>
+          </div>
+        </sc-if>
+        <h1 style="margin:14px 0 4px;font-size:19px;font-weight:700;line-height:1.5;color:var(--text,#efeff1)">{{ watchTitle }}</h1>
+        <div style="display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-top:10px">
+          <span style="width:36px;height:36px;border-radius:50%;background:var(--accent,#9146FF);color:#ffffff;font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center;flex:0 0 auto">{{ watchInitial }}</span>
+          <div style="display:flex;flex-direction:column">
+            <span style="font-size:14px;font-weight:700;color:var(--text,#efeff1)">{{ watchCreator }}</span>
+            <span style="font-size:12px;color:var(--text2,#adadb8)">{{ watchMeta }}</span>
+          </div>
+          <span style="flex:1"></span>
+          <button onClick="{{ onWatchFav }}" style="{{ watchFavStyle }}">{{ watchFavLabel }}</button>
+          <button onClick="{{ onShare }}" style="{{ pillStyle }}">{{ shareLabel }}</button>
+          <a href="{{ watchTwitchUrl }}" target="_blank" rel="noopener" style="{{ pillStyle }}">Twitchで開く ↗</a>
+        </div>
+        <sc-if value="{{ watchGame }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:18px">
+            <button onClick="{{ onWatchGame }}" style="{{ watchGameStyle }}">{{ watchGame }}</button>
+          </div>
+        </sc-if>
+
+        <div style="margin-top:30px">
+          <h2 style="margin:0;font-size:15px;font-weight:700;color:var(--text,#efeff1)">コメント {{ commentCount }}</h2>
+          <sc-if value="{{ commentsNote }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:6px 0 0;font-size:11.5px;color:var(--text2,#adadb8)">{{ commentsNote }}</p>
+          </sc-if>
+          <div style="display:flex;gap:10px;align-items:flex-start;margin-top:16px">
+            <span style="width:34px;height:34px;border-radius:50%;background:var(--surface2,#1f1f23);color:var(--text2,#adadb8);font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;flex:0 0 auto">{{ myInitial }}</span>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px;min-width:0">
+              <input value="{{ commentName }}" onInput="{{ onCommentName }}" placeholder="名前(省略可)" style="width:180px;background:transparent;border:none;border-bottom:1px solid var(--border,#303036);color:var(--text2,#adadb8);font-size:12px;padding:4px 0;outline:none">
+              <div style="display:flex;gap:10px;align-items:center">
+                <input value="{{ commentText }}" onInput="{{ onCommentText }}" onKeyDown="{{ onCommentKey }}" placeholder="コメントを追加…" style="flex:1;background:transparent;border:none;border-bottom:1px solid var(--border,#303036);color:var(--text,#efeff1);font-size:13.5px;padding:6px 0;outline:none">
+                <button onClick="{{ onCommentPost }}" style="{{ postStyle }}">コメント</button>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px;margin-top:22px">
+            <sc-for list="{{ commentRows }}" as="cm" hint-placeholder-count="2">
+              <div style="display:flex;gap:10px">
+                <span style="width:34px;height:34px;border-radius:50%;background:var(--surface2,#1f1f23);color:var(--accent,#9146FF);font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;flex:0 0 auto">{{ cm.initial }}</span>
+                <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <div style="display:flex;align-items:baseline;gap:8px">
+                    <span style="font-size:12.5px;font-weight:700;color:var(--text,#efeff1)">{{ cm.name }}</span>
+                    <span style="font-size:11.5px;color:var(--text2,#adadb8)">{{ cm.time }}</span>
+                  </div>
+                  <p style="margin:0;font-size:13.5px;line-height:1.65;color:var(--text,#efeff1);white-space:pre-wrap;word-break:break-word">{{ cm.text }}</p>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      <aside style="display:flex;flex-direction:column;gap:14px;min-width:0">
+        <h2 style="margin:2px 0 0;font-size:14px;font-weight:700;color:var(--text,#efeff1)">関連クリップ</h2>
+        <sc-for list="{{ related }}" as="r" hint-placeholder-count="6">
+          <div onClick="{{ r.onOpen }}" style="display:grid;grid-template-columns:168px minmax(0,1fr);gap:10px;cursor:pointer">
+            <div style="position:relative;aspect-ratio:16/9;border-radius:9px;overflow:hidden;background:var(--surface2,#1f1f23)">
+              <img src="{{ r.thumb }}" onError="{{ r.onThumbErr }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+              <sc-if value="{{ r.durLabel }}" hint-placeholder-val="{{ false }}">
+                <span style="position:absolute;right:6px;bottom:6px;background:rgba(10,10,14,0.8);color:#ffffff;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:5px">{{ r.durLabel }}</span>
+              </sc-if>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <span style="font-size:13.5px;font-weight:600;line-height:1.4;color:var(--text,#efeff1);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ r.title }}</span>
+              <span style="font-size:12px;color:var(--text2,#adadb8)">{{ r.meta1 }}</span>
+              <span style="font-size:11.5px;color:var(--text2,#adadb8)">{{ r.subMeta }}</span>
+              <div style="display:flex;align-items:center;gap:9px;font-size:11px;color:var(--text2,#adadb8);flex-wrap:wrap">
+                <sc-if value="{{ r.hasGood }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:3px;color:#2FAD62"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="flex:0 0 auto"><path d="M1 21h4V9H1v12zM23 10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg><span style="color:var(--text2,#adadb8)">{{ r.goodCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasBad }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:3px;color:#6C8EE3"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="flex:0 0 auto"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg><span style="color:var(--text2,#adadb8)">{{ r.badCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasQ }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:3px"><span style="color:#F5A623;font-weight:900;display:inline-block;transform:rotate(-8deg)">?</span><span>{{ r.qCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasXq }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:3px"><span style="color:#E5484D;font-weight:900;display:inline-block;transform:rotate(-8deg)">!?</span><span>{{ r.xqCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasMu }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:3px"><span style="color:#D6409F;font-weight:900;display:inline-block;transform:rotate(-8deg)">♪</span><span>{{ r.muCount }}</span></span>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </aside>
+    </section>
+  </sc-if>
+
+  <footer style="padding:28px 24px 42px;border-top:1px solid var(--border,#303036);display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center">
+    <span style="font-size:12.5px;color:var(--text2,#adadb8)">huton-fan は布団ちゃんのTwitchクリップを集めた非公式ファンサイトです。クリップはTwitch公式の埋め込みプレーヤーで再生されます。</span>
+    <span style="font-size:12.5px;color:var(--text2,#adadb8)">布団ちゃんのTwitchチャンネル: <a href="https://www.twitch.tv/indegnasen0706" target="_blank" rel="noopener">twitch.tv/indegnasen0706</a></span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#EB550C&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#EB550C&quot;, &quot;#9146FF&quot;, &quot;#00A98F&quot;, &quot;#4C7DFF&quot;], &quot;section&quot;: &quot;テーマ&quot; },
+  &quot;cardMin&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 300, &quot;min&quot;: 240, &quot;max&quot;: 380, &quot;step&quot;: 10, &quot;unit&quot;: &quot;px&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;レイアウト&quot; },
+  &quot;autoplay&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;再生&quot; }
+}">
+class Component extends DCLogic {
+  state = {
+    data: null, failed: false,
+    view: 'home', currentId: null, backView: 'home',
+    query: '', chip: 'all', sort: 'hot', theme: 'dark',
+    homePeriod: 'all', homeFrom: '2026-01', homeTo: '2026-07',
+    favs: [], hist: [], votes: {}, counts: {}, dbOk: false,
+    comments: [], commentName: '', commentText: '',
+    rankMode: 'week', rankFrom: '2026-01', rankTo: '2026-07',
+    visCount: 96, copied: false, pickerOpen: false
+  };
+
+  GAME_JA = {
+    'Just Chatting': '雑談',
+    'ARK: Survival Evolved': 'ARK',
+    'ARK: Survival Ascended': 'ARK(ASA)',
+    'Minecraft': 'マイクラ',
+    'Grand Theft Auto V': 'GTA5',
+    'Apex Legends': 'Apex',
+    'Street Fighter 6': 'スト6',
+    'ELDEN RING': 'エルデンリング',
+    'Monster Hunter Wilds': 'モンハンワイルズ',
+    'Monster Hunter Rise': 'モンハンライズ',
+    'Dead by Daylight': 'DbD',
+    'Escape from Tarkov': 'タルコフ',
+    'Fall Guys': 'フォールガイズ',
+    'Overwatch 2': 'オーバーウォッチ2',
+    'Special Events': '特別企画',
+    'Music': '音楽',
+    'Sports': 'スポーツ',
+    'Rhythm Heaven': 'リズム天国'
+  };
+  GOOD_W = 100;
+  BAD_W = 100;
+  RX_KEYS = ['good', 'bad', 'q', 'xq', 'mu'];
+
+  gridRef = React.createRef();
+  searchRef = React.createRef();
+
+  ls(key, val) {
+    try {
+      if (val === undefined) {
+        const s = localStorage.getItem('hutonclips:' + key);
+        return s ? JSON.parse(s) : null;
+      }
+      localStorage.setItem('hutonclips:' + key, JSON.stringify(val));
+    } catch (e) { return null; }
+  }
+
+  componentDidMount() {
+    document.title = 'huton-fan｜布団ちゃんTwitchクリップまとめ';
+    const patch = {};
+    const theme = this.ls('theme');
+    if (theme === 'light' || theme === 'dark') patch.theme = theme;
+    const favs = this.ls('favs'); if (Array.isArray(favs)) patch.favs = favs;
+    const hist = this.ls('hist'); if (Array.isArray(hist)) patch.hist = hist;
+    const cname = this.ls('cname'); if (typeof cname === 'string') patch.commentName = cname;
+    const votesRaw = this.ls('votes');
+    if (votesRaw && typeof votesRaw === 'object') {
+      const v = {};
+      for (const k in votesRaw) {
+        const val = votesRaw[k];
+        if (val === 'g') v[k] = { good: 1 };
+        else if (val === 'b') v[k] = { bad: 1 };
+        else if (val && typeof val === 'object') v[k] = val;
+      }
+      patch.votes = v;
+    }
+    const route = this.parseHash();
+    const ui = this.ls('ui');
+    if (route && route.view === 'watch' && route.id) { patch.view = 'watch'; patch.currentId = route.id; patch.backView = (ui && ui.backView) || 'home'; }
+    else if (route && route.view === 'rank') patch.view = 'rank';
+    else if (!route && ui && ui.view === 'watch' && ui.currentId) { patch.view = 'watch'; patch.currentId = ui.currentId; patch.backView = ui.backView || 'home'; }
+    else if (!route && ui && ui.view === 'rank') patch.view = 'rank';
+    const now = new Date();
+    const cm = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+    const past = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+    patch.rankFrom = past.getFullYear() + '-' + String(past.getMonth() + 1).padStart(2, '0');
+    patch.rankTo = cm;
+    patch.homeFrom = patch.rankFrom;
+    patch.homeTo = cm;
+    this.setState(patch);
+
+    this.onKey = (e) => {
+      const el = document.activeElement;
+      const typing = el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT');
+      if (e.key === 'Escape') {
+        if (typing) { el.blur(); return; }
+        if (this.state.view === 'watch') this.goBack();
+      } else if (e.key === '/' && !typing) {
+        e.preventDefault();
+        if (this.searchRef.current) this.searchRef.current.focus();
+      }
+    };
+    window.addEventListener('keydown', this.onKey);
+    this.onHash = () => this.applyRoute();
+    window.addEventListener('hashchange', this.onHash);
+    const wantHash = patch.view === 'watch'
+      ? '#clip/' + encodeURIComponent(patch.currentId)
+      : (patch.view === 'rank' ? '#rank' : '#home');
+    this.setHash(wantHash, true);
+
+    fetch('clips.json', { cache: 'no-store' })
+      .then(r => r.json())
+      .then(d => this.setState({ data: d }))
+      .catch(() => this.setState({ data: { clips: [] }, failed: true }));
+
+    this.loadCounts();
+    setTimeout(() => {
+      if (this.state.view === 'watch' && this.state.currentId) this.fetchComments(this.state.currentId);
+    }, 900);
+    this.applyDensity();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onKey);
+    window.removeEventListener('hashchange', this.onHash);
+    clearTimeout(this.copyTimer);
+  }
+
+  componentDidUpdate() { this.applyDensity(); }
+
+  applyDensity() {
+    const el = this.gridRef.current;
+    if (el) {
+      const w = Math.max(200, Math.min(480, Number(this.props.cardMin ?? 300)));
+      el.style.gridTemplateColumns = 'repeat(auto-fill, minmax(' + w + 'px, 1fr))';
+    }
+  }
+
+  dbUrl() {
+    const u = (window.HUTONCLIPS_DB_URL || '').trim().replace(/\/+$/, '');
+    return u || null;
+  }
+
+  normCounts(raw) {
+    const counts = {};
+    if (raw && typeof raw === 'object') {
+      for (const k in raw) {
+        const c = raw[k] || {};
+        counts[k] = {
+          good: Number(c.good !== undefined ? c.good : c.g) || 0,
+          bad: Number(c.bad !== undefined ? c.bad : c.b) || 0,
+          q: Number(c.q) || 0, xq: Number(c.xq) || 0, mu: Number(c.mu) || 0
+        };
+      }
+    }
+    return counts;
+  }
+
+  loadCounts(attempt = 0) {
+    if (typeof window.HUTONCLIPS_DB_URL === 'undefined' && attempt < 10) {
+      setTimeout(() => this.loadCounts(attempt + 1), 300);
+      return;
+    }
+    const u = this.dbUrl();
+    if (!u) { this.setState({ counts: this.normCounts(this.ls('localCounts')) }); return; }
+    fetch(u + '/clips.json')
+      .then(r => r.json())
+      .then(j => this.setState({ counts: this.normCounts(j), dbOk: true }))
+      .catch(() => this.setState({ counts: this.normCounts(this.ls('localCounts')) }));
+  }
+
+  clips() { return (this.state.data && this.state.data.clips) || []; }
+  gameLabel(g) { return this.GAME_JA[g] || g || ''; }
+  cnt(id) {
+    const c = this.state.counts[id] || {};
+    return { good: c.good || 0, bad: c.bad || 0, q: c.q || 0, xq: c.xq || 0, mu: c.mu || 0 };
+  }
+  score(c) { const n = this.cnt(c.id); return n.good + n.bad + n.q + n.xq + n.mu; }
+
+  // おすすめ順: 人気(視聴回数+リアクション)を経過日数で減衰 — 新しくて勢いのある物が上位
+  hotScore(c) {
+    const days = c.created ? Math.max(0, (Date.now() - new Date(c.created).getTime()) / 864e5) : 9999;
+    const pop = (c.views || 0) + this.score(c) * 200;
+    return pop / Math.pow(days + 2, 1.35);
+  }
+
+  react(id, key, ev) {
+    const votes = { ...this.state.votes };
+    const mine = { ...(votes[id] || {}) };
+    const turnOn = !mine[key];
+    if (turnOn) mine[key] = 1; else delete mine[key];
+    if (Object.keys(mine).length) votes[id] = mine; else delete votes[id];
+    const counts = { ...this.state.counts };
+    const n = { ...(counts[id] || { good: 0, bad: 0, q: 0, xq: 0, mu: 0 }) };
+    n[key] = Math.max(0, (n[key] || 0) + (turnOn ? 1 : -1));
+    counts[id] = n;
+    this.setState({ votes, counts });
+    this.ls('votes', votes);
+    const u = this.dbUrl();
+    if (u) {
+      const body = {};
+      body[key] = { '.sv': { 'increment': turnOn ? 1 : -1 } };
+      fetch(u + '/clips/' + encodeURIComponent(id) + '.json', { method: 'PATCH', body: JSON.stringify(body) }).catch(() => {});
+    } else {
+      this.ls('localCounts', counts);
+    }
+  }
+
+  fetchComments(id) {
+    const u = this.dbUrl();
+    if (!u) {
+      const all = this.ls('localComments') || {};
+      this.setState({ comments: (all[id] || []).slice() });
+      return;
+    }
+    fetch(u + '/comments/' + encodeURIComponent(id) + '.json')
+      .then(r => r.json())
+      .then(j => {
+        const arr = [];
+        if (j && typeof j === 'object') for (const k in j) arr.push(j[k]);
+        arr.sort((a, b) => (b.at || 0) - (a.at || 0));
+        if (this.state.currentId === id) this.setState({ comments: arr });
+      })
+      .catch(() => {});
+  }
+
+  postComment() {
+    const t = this.state.commentText.trim();
+    const id = this.state.currentId;
+    if (!t || !id) return;
+    const nm = (this.state.commentName.trim() || '名無し').slice(0, 30);
+    const mine = { n: nm, t: t.slice(0, 500), at: Date.now() };
+    this.ls('cname', this.state.commentName.trim());
+    this.setState({ comments: [mine].concat(this.state.comments), commentText: '' });
+    const u = this.dbUrl();
+    if (u) {
+      fetch(u + '/comments/' + encodeURIComponent(id) + '.json', {
+        method: 'POST',
+        body: JSON.stringify({ n: mine.n, t: mine.t, at: { '.sv': 'timestamp' } })
+      }).then(() => setTimeout(() => this.fetchComments(id), 900)).catch(() => {});
+    } else {
+      const all = this.ls('localComments') || {};
+      all[id] = [mine].concat(all[id] || []).slice(0, 500);
+      this.ls('localComments', all);
+    }
+  }
+
+  fmtViews(v) {
+    if (v === null || v === undefined) return null;
+    if (v >= 10000) return (Math.round(v / 1000) / 10) + '万回視聴';
+    return v.toLocaleString('ja-JP') + '回視聴';
+  }
+
+  fmtDur(d) {
+    if (!d) return null;
+    const s = Math.round(d);
+    return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  }
+
+  dateLabel(p) {
+    if (!p) return '';
+    const d = new Date(p);
+    if (isNaN(d.getTime())) return '';
+    const days = Math.floor((Date.now() - d.getTime()) / 864e5);
+    if (days <= 0) return '今日';
+    if (days === 1) return '昨日';
+    if (days < 30) return days + '日前';
+    if (days < 365) return Math.floor(days / 30) + 'ヶ月前';
+    return Math.floor(days / 365) + '年前';
+  }
+
+  phThumb() {
+    const accent = this.props.accent ?? '#9146FF';
+    if (this._ph && this._phAccent === accent) return this._ph;
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='480' height='272'><rect width='480' height='272' fill='#1b1d24'/><path d='M215 103 L285 136 L215 169 Z' fill='" + accent + "'/></svg>";
+    this._ph = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    this._phAccent = accent;
+    return this._ph;
+  }
+
+  toggleFav(id) {
+    const has = this.state.favs.includes(id);
+    const favs = has ? this.state.favs.filter(x => x !== id) : this.state.favs.concat([id]);
+    this.setState({ favs });
+    this.ls('favs', favs);
+  }
+
+  open(id, fromHash) {
+    const backView = this.state.view === 'watch' ? this.state.backView : (this.state.view === 'rank' ? 'rank' : 'home');
+    const hist = [id].concat(this.state.hist.filter(x => x !== id)).slice(0, 200);
+    this.setState({ view: 'watch', currentId: id, backView, hist, copied: false, comments: [], commentText: '', pickerOpen: false });
+    this.ls('hist', hist);
+    this.ls('ui', { view: 'watch', currentId: id, backView });
+    const c = this.clips().find(x => x.id === id);
+    if (c) document.title = (c.title || 'クリップ') + '｜huton-fan';
+    if (!fromHash) this.setHash('#clip/' + encodeURIComponent(id));
+    this.fetchComments(id);
+    window.scrollTo(0, 0);
+  }
+
+  setView(view, fromHash) {
+    this.setState({ view, copied: false });
+    this.ls('ui', { view, currentId: null });
+    document.title = 'huton-fan｜布団ちゃんTwitchクリップまとめ';
+    if (!fromHash) this.setHash(view === 'rank' ? '#rank' : '#home');
+    window.scrollTo(0, 0);
+  }
+
+  goBack() { this.setView(this.state.backView === 'rank' ? 'rank' : 'home'); }
+
+  parseHash() {
+    const h = ((typeof location !== 'undefined' && location.hash) || '').replace(/^#/, '');
+    if (h.indexOf('clip/') === 0 && h.length > 5) return { view: 'watch', id: decodeURIComponent(h.slice(5)) };
+    if (h === 'rank') return { view: 'rank' };
+    if (h === 'home' || h === '') return { view: 'home' };
+    return null;
+  }
+
+  setHash(want, replace) {
+    try {
+      if (location.hash === want) return;
+      if (replace && history.replaceState) { history.replaceState(null, '', want); return; }
+      location.hash = want;
+    } catch (e) {}
+  }
+
+  applyRoute() {
+    const p = this.parseHash();
+    if (!p) return;
+    if (p.view === 'watch' && p.id) {
+      if (this.state.view === 'watch' && this.state.currentId === p.id) return;
+      this.open(p.id, true);
+    } else {
+      if (this.state.view === p.view) return;
+      this.setView(p.view, true);
+    }
+  }
+
+  deco(c) {
+    const accent = this.props.accent ?? '#9146FF';
+    const n = this.cnt(c.id);
+    const faved = this.state.favs.includes(c.id);
+    const days = c.created ? Math.floor((Date.now() - new Date(c.created).getTime()) / 864e5) : 9999;
+    return {
+      id: c.id,
+      title: c.title || '(無題クリップ)',
+      thumb: c.thumb || this.phThumb(),
+      onThumbErr: (e) => {
+        const img = e.target;
+        if (img.dataset.fb !== '1') { img.dataset.fb = '1'; img.src = this.phThumb(); }
+      },
+      meta1: [this.gameLabel(c.game), this.dateLabel(c.created)].filter(Boolean).join(' ・ '),
+      subMeta: [this.fmtViews(c.views)].filter(Boolean).join(''),
+      viewsLabel: this.fmtViews(c.views),
+      durLabel: this.fmtDur(c.duration),
+      goodCount: String(n.good),
+      badCount: String(n.bad),
+      qCount: String(n.q),
+      xqCount: String(n.xq),
+      muCount: String(n.mu),
+      hasGood: n.good > 0,
+      hasBad: n.bad > 0,
+      hasQ: n.q > 0,
+      hasXq: n.xq > 0,
+      hasMu: n.mu > 0,
+      isNew: days <= 3,
+      favIcon: faved ? '♥' : '♡',
+      favStyle: {
+        position: 'absolute', top: '8px', right: '8px', width: '34px', height: '34px',
+        borderRadius: '50%', border: 'none', cursor: 'pointer',
+        background: 'rgba(10,10,14,0.72)', color: faved ? accent : '#ffffff',
+        fontSize: '17px', lineHeight: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0
+      },
+      onFav: (e) => { e.stopPropagation(); this.toggleFav(c.id); },
+      onOpen: () => this.open(c.id)
+    };
+  }
+
+  chipStyle(active) {
+    return active ? {
+      flex: '0 0 auto', padding: '7px 14px', borderRadius: '9px', fontSize: '13px', fontWeight: 700,
+      cursor: 'pointer', border: '1px solid transparent',
+      background: 'var(--text, #efeff1)', color: 'var(--bg, #0e0e10)', whiteSpace: 'nowrap'
+    } : {
+      flex: '0 0 auto', padding: '7px 14px', borderRadius: '9px', fontSize: '13px', fontWeight: 600,
+      cursor: 'pointer', border: '1px solid var(--border, #303036)',
+      background: 'var(--surface2, #1f1f23)', color: 'var(--text, #efeff1)', whiteSpace: 'nowrap'
+    };
+  }
+
+  buildChips() {
+    const { chip } = this.state;
+    const defs = [
+      { key: 'all', label: 'すべて' },
+      { key: 'fav', label: 'お気に入り' },
+      { key: 'hist', label: '履歴' }
+    ];
+    const cnt = {};
+    this.clips().forEach(c => { if (c.game) cnt[c.game] = (cnt[c.game] || 0) + 1; });
+    Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]).slice(0, 14)
+      .forEach(g => defs.push({ key: 'g:' + g, label: this.gameLabel(g) }));
+    return defs.map(d => ({
+      label: d.label,
+      style: this.chipStyle(chip === d.key),
+      onClick: () => this.setState({ chip: d.key, visCount: 96 })
+    }));
+  }
+
+  visible() {
+    const { chip, query, sort, favs, hist } = this.state;
+    let list = this.clips();
+    if (this.state.homePeriod === 'custom') {
+      let f = this.state.homeFrom, t = this.state.homeTo;
+      if (f > t) { const x = f; f = t; t = x; }
+      list = list.filter(c => c.created && c.created.slice(0, 7) >= f && c.created.slice(0, 7) <= t);
+    }
+    if (chip === 'fav') list = list.filter(c => favs.includes(c.id));
+    else if (chip === 'hist') {
+      const order = new Map(hist.map((id, i) => [id, i]));
+      list = list.filter(c => order.has(c.id)).sort((a, b) => order.get(a.id) - order.get(b.id));
+    } else if (chip.indexOf('g:') === 0) {
+      const g = chip.slice(2);
+      list = list.filter(c => (c.game || '') === g);
+    }
+    const q = query.trim().toLowerCase();
+    if (q) list = list.filter(c =>
+      ((c.title || '') + ' ' + (c.game || '') + ' ' + this.gameLabel(c.game) + ' ' + (c.creator || '')).toLowerCase().includes(q)
+    );
+    if (chip !== 'hist') {
+      if (sort === 'hot') list = [...list].sort((a, b) => this.hotScore(b) - this.hotScore(a));
+      else if (sort === 'new') list = [...list].sort((a, b) => String(b.created || '0000').localeCompare(String(a.created || '0000')));
+      else if (sort === 'old') list = [...list].sort((a, b) => String(a.created || '9999').localeCompare(String(b.created || '9999')));
+      else if (sort === 'views') list = [...list].sort((a, b) => (b.views || 0) - (a.views || 0));
+      else if (sort === 'good') list = [...list].sort((a, b) => this.cnt(b.id).good - this.cnt(a.id).good);
+    }
+    return list;
+  }
+
+  monthOpts() {
+    const out = [];
+    const now = new Date();
+    let y = 2022, m = 7;
+    while (y < now.getFullYear() || (y === now.getFullYear() && m <= now.getMonth() + 1)) {
+      const v = y + '-' + String(m).padStart(2, '0');
+      out.push({ v, label: y + '/' + String(m).padStart(2, '0') });
+      m++; if (m > 12) { m = 1; y++; }
+    }
+    return out.reverse();
+  }
+
+  rankItems() {
+    const mode = this.state.rankMode;
+    let list;
+    if (mode === 'custom') {
+      let f = this.state.rankFrom, t = this.state.rankTo;
+      if (f > t) { const x = f; f = t; t = x; }
+      list = this.clips().filter(c => c.created && c.created.slice(0, 7) >= f && c.created.slice(0, 7) <= t);
+    } else {
+      const lim = Date.now() - (mode === 'week' ? 7 : 30) * 864e5;
+      list = this.clips().filter(c => c.created && new Date(c.created).getTime() >= lim);
+    }
+    return list
+      .map(c => ({ c, s: this.score(c) }))
+      .sort((a, b) => (b.s - a.s) || ((b.c.views || 0) - (a.c.views || 0)) || String(b.c.created || '').localeCompare(String(a.c.created || '')))
+      .slice(0, 50)
+      .map((x, i) => ({
+        ...this.deco(x.c),
+        num: String(i + 1) + '位',
+        badgeStyle: {
+          position: 'absolute', left: '8px', top: '8px',
+          background: i < 3 ? 'var(--accent, #EB550C)' : 'rgba(10,10,14,0.8)',
+          color: '#ffffff', fontWeight: 900, fontSize: '12.5px',
+          padding: '2px 9px', borderRadius: '7px', letterSpacing: '.5px'
+        }
+      }));
+  }
+
+  related(cur) {
+    return this.clips()
+      .filter(c => c.id !== cur.id)
+      .map(c => ({ c, s: (c.game && c.game === cur.game ? 1e9 : 0) + (c.views || 0) }))
+      .sort((a, b) => b.s - a.s)
+      .slice(0, 15)
+      .map(x => this.deco(x.c));
+  }
+
+  renderVals() {
+    const { view, theme, query, sort, chip, data, currentId, copied, failed, favs, votes, visCount, rankMode, dbOk, comments } = this.state;
+    const accent = this.props.accent ?? '#9146FF';
+    const autoplay = this.props.autoplay ?? true;
+    const dark = theme === 'dark';
+
+    const vars = dark ? {
+      '--bg': '#15161c', '--surface': '#1b1d24', '--surface2': '#232630',
+      '--border': '#31343f', '--text': '#f2f3f5', '--text2': '#9aa0ad', '--shadow': 'rgba(0,0,0,.55)'
+    } : {
+      '--bg': '#f7f7f8', '--surface': '#ffffff', '--surface2': '#ebebf0',
+      '--border': '#d9d9e0', '--text': '#18181b', '--text2': '#56565f', '--shadow': 'rgba(20,20,40,.14)'
+    };
+    const rootStyle = {
+      ...vars, '--accent': accent,
+      minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)',
+      fontFamily: "'Noto Sans JP', sans-serif"
+    };
+
+    const loading = data === null;
+    const allVisible = loading ? [] : this.visible();
+    const grid = allVisible.slice(0, visCount).map(c => this.deco(c));
+    const remain = allVisible.length - grid.length;
+
+    let emptyMsg = '';
+    if (!loading && allVisible.length === 0) {
+      if (chip === 'fav') emptyMsg = 'お気に入りはまだありません。サムネイル右上の ♡ から登録できます。';
+      else if (chip === 'hist') emptyMsg = 'まだ視聴履歴がありません。';
+      else if (query.trim()) emptyMsg = '「' + query.trim() + '」に一致するクリップが見つかりませんでした。';
+      else if (failed) emptyMsg = 'clips.json を読み込めませんでした。';
+      else emptyMsg = 'クリップがまだありません。README-clips.md の手順で自動取得を設定してください。';
+    }
+
+    const navStyle = (active) => active ? {
+      background: 'var(--surface2, #1f1f23)', border: '1px solid var(--border, #303036)',
+      color: 'var(--text, #efeff1)', borderRadius: '999px', padding: '8px 16px',
+      fontSize: '13px', fontWeight: 700, cursor: 'pointer'
+    } : {
+      background: 'none', border: '1px solid transparent',
+      color: 'var(--text2, #adadb8)', borderRadius: '999px', padding: '8px 16px',
+      fontSize: '13px', fontWeight: 600, cursor: 'pointer'
+    };
+
+    const cur = this.clips().find(c => c.id === currentId) ||
+      { id: currentId || '', title: '(読み込み中…)', game: '', created: null, views: null, duration: null, creator: '', thumb: null };
+    const n = this.cnt(cur.id);
+    const mine = votes[cur.id] || {};
+    const pillStyle = {
+      display: 'flex', alignItems: 'center', gap: '7px',
+      background: 'var(--surface2, #1f1f23)', border: '1px solid var(--border, #303036)',
+      color: 'var(--text, #efeff1)', borderRadius: '999px', padding: '9px 16px',
+      fontSize: '13px', fontWeight: 700, cursor: 'pointer'
+    };
+    const rxOn = (on, color) => on
+      ? { ...pillStyle, border: '1px solid ' + color, color: color, fontWeight: 800 }
+      : pillStyle;
+    const pk = (on, color) => ({
+      width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0,
+      fontWeight: 900, fontSize: '16px', lineHeight: 1,
+      background: 'transparent', color: color,
+      border: on ? '2px solid ' + color : '2px solid transparent'
+    });
+    const host = (typeof location !== 'undefined' && location.hostname) || 'localhost';
+    const onGithub = /\.github\.io$/.test(host);
+
+    return {
+      rootStyle,
+      gridRef: this.gridRef,
+      searchRef: this.searchRef,
+      isHome: view === 'home',
+      isRank: view === 'rank',
+      isWatch: view === 'watch',
+      navHomeStyle: navStyle(view === 'home'),
+      navRankStyle: navStyle(view === 'rank'),
+      onNavHome: () => this.setView('home'),
+      onNavRank: () => this.setView('rank'),
+      themeLabel: dark ? '☀ ライト' : '● ダーク',
+      onTheme: () => { const t = dark ? 'light' : 'dark'; this.setState({ theme: t }); this.ls('theme', t); },
+      query,
+      onQuery: (e) => {
+        const patch = { query: e.target.value, visCount: 96 };
+        if (this.state.view === 'rank') patch.view = 'home';
+        this.setState(patch);
+      },
+      sort,
+      onSort: (e) => this.setState({ sort: e.target.value, visCount: 96 }),
+      homeCustom: this.state.homePeriod === 'custom',
+      homePeriodStyle: this.chipStyle(this.state.homePeriod === 'custom'),
+      onHomePeriod: () => this.setState({ homePeriod: this.state.homePeriod === 'custom' ? 'all' : 'custom', visCount: 96 }),
+      homeFrom: this.state.homeFrom,
+      homeTo: this.state.homeTo,
+      onHomeFrom: (e) => this.setState({ homeFrom: e.target.value, visCount: 96 }),
+      onHomeTo: (e) => this.setState({ homeTo: e.target.value, visCount: 96 }),
+      chips: this.buildChips(),
+      countLabel: loading ? '' : allVisible.length + '本',
+      sampleNotice: !loading && data && data.sample
+        ? 'いまはサンプル3件のみ表示しています。README-clips.md の手順(無料)を設定すると、チャンネルの全クリップが毎日自動で反映され、視聴回数・日付・サムネイルも揃います。'
+        : false,
+      loading,
+      ready: !loading,
+      skels: [0, 1, 2, 3, 4, 5, 6, 7],
+      grid,
+      hasMore: remain > 0,
+      remainLabel: '残り' + remain + '本',
+      onMore: () => this.setState({ visCount: this.state.visCount + 96 }),
+      emptyMsg,
+
+      onRankWeek: () => this.setState({ rankMode: 'week' }),
+      onRankMonth: () => this.setState({ rankMode: 'month' }),
+      onRankCustom: () => this.setState({ rankMode: 'custom' }),
+      rankWeekStyle: this.chipStyle(rankMode === 'week'),
+      rankMonthStyle: this.chipStyle(rankMode === 'month'),
+      rankCustomStyle: this.chipStyle(rankMode === 'custom'),
+      isCustom: rankMode === 'custom',
+      rankFrom: this.state.rankFrom,
+      rankTo: this.state.rankTo,
+      onRankFrom: (e) => this.setState({ rankFrom: e.target.value }),
+      onRankTo: (e) => this.setState({ rankTo: e.target.value }),
+      monthOpts: this.monthOpts(),
+      rankRows: view === 'rank' ? this.rankItems() : [],
+      rankEmpty: view === 'rank' && !loading && this.rankItems().length === 0
+        ? '対象期間のクリップがありません。自動取得を設定すると日付データが揃い、ランキングが表示されます。'
+        : false,
+
+      playerSrc: cur.id
+        ? 'https://clips.twitch.tv/embed?clip=' + encodeURIComponent(cur.id) + '&parent=' + host + '&autoplay=' + (autoplay ? 'true' : 'false')
+        : '',
+      embedHint: onGithub ? false : '※この環境ではTwitchの仕様によりプレーヤーが動かない場合があります。GitHub Pages公開後のサイトでは再生できます。',
+      watchTitle: cur.title || '(無題クリップ)',
+      watchCreator: cur.creator ? cur.creator + ' さんのクリップ' : 'クリップ作成者 取得待ち',
+      watchInitial: (cur.creator || 'C').trim().charAt(0).toUpperCase() || 'C',
+      watchMeta: [this.gameLabel(cur.game), this.dateLabel(cur.created), this.fmtViews(cur.views)].filter(Boolean).join(' ・ '),
+      onGood: (e) => this.react(cur.id, 'good', e),
+      onBad: (e) => this.react(cur.id, 'bad', e),
+      onQ: (e) => this.react(cur.id, 'q', e),
+      onXq: (e) => this.react(cur.id, 'xq', e),
+      onMu: (e) => this.react(cur.id, 'mu', e),
+      goodLabel: String(n.good),
+      badLabel: String(n.bad),
+      qLabel: String(n.q),
+      xqLabel: String(n.xq),
+      muLabel: String(n.mu),
+      goodStyle: rxOn(!!mine.good, '#2FAD62'),
+      badStyle: rxOn(!!mine.bad, '#6C8EE3'),
+      qStyle: rxOn(!!mine.q, '#F5A623'),
+      xqStyle: rxOn(!!mine.xq, '#E5484D'),
+      muStyle: rxOn(!!mine.mu, '#D6409F'),
+      watchHasGood: n.good > 0,
+      watchHasBad: n.bad > 0,
+      watchHasQ: n.q > 0,
+      watchHasXq: n.xq > 0,
+      watchHasMu: n.mu > 0,
+      pickerOpen: this.state.pickerOpen,
+      onTogglePicker: () => this.setState({ pickerOpen: !this.state.pickerOpen }),
+      plusStyle: {
+        width: '38px', height: '38px', borderRadius: '50%', flex: '0 0 auto',
+        border: '1px solid var(--border, #303036)', background: 'var(--surface2, #1f1f23)',
+        color: 'var(--text, #efeff1)', fontSize: '16px', fontWeight: 700, cursor: 'pointer',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, lineHeight: 1
+      },
+      onPickGood: (e) => { this.react(cur.id, 'good', e); this.setState({ pickerOpen: false }); },
+      onPickBad: (e) => { this.react(cur.id, 'bad', e); this.setState({ pickerOpen: false }); },
+      onPickQ: (e) => { this.react(cur.id, 'q', e); this.setState({ pickerOpen: false }); },
+      onPickXq: (e) => { this.react(cur.id, 'xq', e); this.setState({ pickerOpen: false }); },
+      onPickMu: (e) => { this.react(cur.id, 'mu', e); this.setState({ pickerOpen: false }); },
+      pickGoodStyle: pk(!!mine.good, '#2FAD62'),
+      pickBadStyle: pk(!!mine.bad, '#6C8EE3'),
+      pickQStyle: pk(!!mine.q, '#F5A623'),
+      pickXqStyle: pk(!!mine.xq, '#E5484D'),
+      pickMuStyle: pk(!!mine.mu, '#D6409F'),
+      goodIconStyle: { display: 'flex', alignItems: 'center', color: '#2FAD62' },
+      badIconStyle: { display: 'flex', alignItems: 'center', color: '#6C8EE3' },
+      qGlyphStyle: { display: 'inline-block', transform: 'rotate(-8deg)', fontWeight: 900, fontSize: '15px', lineHeight: '1', color: '#F5A623' },
+      xqGlyphStyle: { display: 'inline-block', transform: 'rotate(-8deg)', fontWeight: 900, fontSize: '15px', lineHeight: '1', color: '#E5484D' },
+      muGlyphStyle: { display: 'inline-block', transform: 'rotate(-8deg)', fontWeight: 900, fontSize: '15px', lineHeight: '1', color: '#D6409F' },
+      onWatchFav: () => this.toggleFav(cur.id),
+      watchFavStyle: favs.includes(cur.id)
+        ? { ...pillStyle, background: accent, border: '1px solid transparent', color: '#ffffff' }
+        : pillStyle,
+      watchFavLabel: favs.includes(cur.id) ? '♥ お気に入り済み' : '♡ お気に入り',
+      onShare: () => {
+        const url = 'https://www.twitch.tv/indegnasen0706/clip/' + cur.id;
+        try { navigator.clipboard.writeText(url); } catch (e) {}
+        this.setState({ copied: true });
+        clearTimeout(this.copyTimer);
+        this.copyTimer = setTimeout(() => this.setState({ copied: false }), 1600);
+      },
+      shareLabel: copied ? 'コピーしました ✓' : '共有',
+      pillStyle,
+      watchTwitchUrl: 'https://www.twitch.tv/indegnasen0706/clip/' + (cur.id || ''),
+      watchGame: cur.game ? this.gameLabel(cur.game) : false,
+      watchGameStyle: this.chipStyle(false),
+      onWatchGame: () => { this.setState({ view: 'home', chip: 'g:' + cur.game, visCount: 96 }); this.ls('ui', { view: 'home', currentId: null }); },
+      related: view === 'watch' ? this.related(cur) : [],
+
+      commentCount: comments.length + '件',
+      commentsNote: dbOk ? false : 'リアクションとコメントは今この端末内だけに保存されます。全視聴者と共有するには firebase-config.js の設定が必要です(README-clips.md参照)。',
+      myInitial: (this.state.commentName.trim() || '名').charAt(0).toUpperCase(),
+      commentName: this.state.commentName,
+      commentText: this.state.commentText,
+      onCommentName: (e) => this.setState({ commentName: e.target.value }),
+      onCommentText: (e) => this.setState({ commentText: e.target.value }),
+      onCommentKey: (e) => {
+        if (e.key === 'Enter' && !(e.nativeEvent && e.nativeEvent.isComposing)) this.postComment();
+      },
+      onCommentPost: () => this.postComment(),
+      postStyle: this.state.commentText.trim()
+        ? { ...pillStyle, background: accent, border: '1px solid transparent', color: '#ffffff' }
+        : { ...pillStyle, opacity: .45 },
+      commentRows: comments.map(c => ({
+        initial: String(c.n || '名').trim().charAt(0).toUpperCase() || '名',
+        name: c.n || '名無し',
+        time: this.dateLabel(c.at),
+        text: c.t || ''
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>
