@@ -148,16 +148,25 @@ input::placeholder { color: #8a8f99; }
                     <span style="display:flex;align-items:center;gap:4px;color:#2FAD62"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex:0 0 auto"><path d="M1 21h4V9H1v12zM23 10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg><span style="color:var(--text2,#adadb8)">{{ v.goodCount }}</span></span>
                   </sc-if>
                   <sc-if value="{{ v.hasBad }}" hint-placeholder-val="{{ false }}">
-                    <span style="display:flex;align-items:center;gap:4px;color:#6C8EE3"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex:0 0 auto"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg><span style="color:var(--text2,#adadb8)">{{ v.badCount }}</span></span>
+                    <span style="display:flex;align-items:center;gap:4px;color:#6C8EE3"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex:0 0 auto;transform:rotate(5deg)"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg><span style="color:var(--text2,#adadb8)">{{ v.badCount }}</span></span>
+                  </sc-if>
+                  <sc-if value="{{ v.hasKusa }}" hint-placeholder-val="{{ false }}">
+                    <span style="display:flex;align-items:center;gap:4px"><span style="color:#57C15A;font-weight:900;display:inline-block;transform:rotate(3deg)">草</span><span>{{ v.kusaCount }}</span></span>
+                  </sc-if>
+                  <sc-if value="{{ v.hasKami }}" hint-placeholder-val="{{ false }}">
+                    <span style="display:flex;align-items:center;gap:4px"><span style="color:#F7C948;font-weight:900;display:inline-block;-webkit-text-stroke:0.03em #F7C948">神</span><span>{{ v.kamiCount }}</span></span>
+                  </sc-if>
+                  <sc-if value="{{ v.hasNaki }}" hint-placeholder-val="{{ false }}">
+                    <span style="display:flex;align-items:center;gap:4px"><span style="color:#5CB3F5;font-weight:900;display:inline-block;transform:rotate(10deg);-webkit-text-stroke:0.03em #5CB3F5">泣</span><span>{{ v.nakiCount }}</span></span>
                   </sc-if>
                   <sc-if value="{{ v.hasQ }}" hint-placeholder-val="{{ false }}">
-                    <span style="display:flex;align-items:center;gap:4px"><span style="color:#F5A623;font-weight:900;display:inline-block;transform:rotate(-8deg)">?</span><span>{{ v.qCount }}</span></span>
+                    <span style="display:flex;align-items:center;gap:4px"><span style="color:#F5A623;font-weight:900;display:inline-block;transform:rotate(-10deg);-webkit-text-stroke:0.03em #F5A623">?</span><span>{{ v.qCount }}</span></span>
                   </sc-if>
                   <sc-if value="{{ v.hasXq }}" hint-placeholder-val="{{ false }}">
-                    <span style="display:flex;align-items:center;gap:4px"><span style="color:#E5484D;font-weight:900;display:inline-block;transform:rotate(-8deg)">!?</span><span>{{ v.xqCount }}</span></span>
+                    <span style="display:flex;align-items:center;gap:4px"><span style="color:#E5484D;font-weight:900;display:inline-block;-webkit-text-stroke:0.03em #E5484D">!?</span><span>{{ v.xqCount }}</span></span>
                   </sc-if>
                   <sc-if value="{{ v.hasMu }}" hint-placeholder-val="{{ false }}">
-                    <span style="display:flex;align-items:center;gap:4px"><span style="color:#D6409F;font-weight:900;display:inline-block;transform:rotate(-8deg)">♪</span><span>{{ v.muCount }}</span></span>
+                    <span style="display:flex;align-items:center;gap:4px"><span style="color:#D6409F;font-weight:900;display:inline-block;transform:rotate(-12deg);-webkit-text-stroke:0.03em #D6409F">♪</span><span>{{ v.muCount }}</span></span>
                   </sc-if>
                 </div>
               </div>
@@ -221,16 +230,25 @@ input::placeholder { color: #8a8f99; }
                   <span style="display:flex;align-items:center;gap:4px;color:#2FAD62"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex:0 0 auto"><path d="M1 21h4V9H1v12zM23 10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg><span style="color:var(--text2,#adadb8)">{{ r.goodCount }}</span></span>
                 </sc-if>
                 <sc-if value="{{ r.hasBad }}" hint-placeholder-val="{{ false }}">
-                  <span style="display:flex;align-items:center;gap:4px;color:#6C8EE3"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex:0 0 auto"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg><span style="color:var(--text2,#adadb8)">{{ r.badCount }}</span></span>
+                  <span style="display:flex;align-items:center;gap:4px;color:#6C8EE3"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex:0 0 auto;transform:rotate(5deg)"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg><span style="color:var(--text2,#adadb8)">{{ r.badCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasKusa }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:4px"><span style="color:#57C15A;font-weight:900;display:inline-block;transform:rotate(3deg)">草</span><span>{{ r.kusaCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasKami }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:4px"><span style="color:#F7C948;font-weight:900;display:inline-block;-webkit-text-stroke:0.03em #F7C948">神</span><span>{{ r.kamiCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasNaki }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:4px"><span style="color:#5CB3F5;font-weight:900;display:inline-block;transform:rotate(10deg);-webkit-text-stroke:0.03em #5CB3F5">泣</span><span>{{ r.nakiCount }}</span></span>
                 </sc-if>
                 <sc-if value="{{ r.hasQ }}" hint-placeholder-val="{{ false }}">
-                  <span style="display:flex;align-items:center;gap:4px"><span style="color:#F5A623;font-weight:900;display:inline-block;transform:rotate(-8deg)">?</span><span>{{ r.qCount }}</span></span>
+                  <span style="display:flex;align-items:center;gap:4px"><span style="color:#F5A623;font-weight:900;display:inline-block;transform:rotate(-10deg);-webkit-text-stroke:0.03em #F5A623">?</span><span>{{ r.qCount }}</span></span>
                 </sc-if>
                 <sc-if value="{{ r.hasXq }}" hint-placeholder-val="{{ false }}">
-                  <span style="display:flex;align-items:center;gap:4px"><span style="color:#E5484D;font-weight:900;display:inline-block;transform:rotate(-8deg)">!?</span><span>{{ r.xqCount }}</span></span>
+                  <span style="display:flex;align-items:center;gap:4px"><span style="color:#E5484D;font-weight:900;display:inline-block;-webkit-text-stroke:0.03em #E5484D">!?</span><span>{{ r.xqCount }}</span></span>
                 </sc-if>
                 <sc-if value="{{ r.hasMu }}" hint-placeholder-val="{{ false }}">
-                  <span style="display:flex;align-items:center;gap:4px"><span style="color:#D6409F;font-weight:900;display:inline-block;transform:rotate(-8deg)">♪</span><span>{{ r.muCount }}</span></span>
+                  <span style="display:flex;align-items:center;gap:4px"><span style="color:#D6409F;font-weight:900;display:inline-block;transform:rotate(-12deg);-webkit-text-stroke:0.03em #D6409F">♪</span><span>{{ r.muCount }}</span></span>
                 </sc-if>
               </div>
             </div>
@@ -261,6 +279,15 @@ input::placeholder { color: #8a8f99; }
           <sc-if value="{{ watchHasBad }}" hint-placeholder-val="{{ false }}">
             <button onClick="{{ onBad }}" title="Bad" style="{{ badStyle }}"><span style="{{ badIconStyle }}"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex:0 0 auto"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg></span>{{ badLabel }}</button>
           </sc-if>
+          <sc-if value="{{ watchHasKusa }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onKusa }}" title="草" style="{{ kusaStyle }}"><span style="{{ kusaGlyphStyle }}">草</span>{{ kusaLabel }}</button>
+          </sc-if>
+          <sc-if value="{{ watchHasKami }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onKami }}" title="神" style="{{ kamiStyle }}"><span style="{{ kamiGlyphStyle }}">神</span>{{ kamiLabel }}</button>
+          </sc-if>
+          <sc-if value="{{ watchHasNaki }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onNaki }}" title="泣" style="{{ nakiStyle }}"><span style="{{ nakiGlyphStyle }}">泣</span>{{ nakiLabel }}</button>
+          </sc-if>
           <sc-if value="{{ watchHasQ }}" hint-placeholder-val="{{ false }}">
             <button onClick="{{ onQ }}" title="疑問" style="{{ qStyle }}"><span style="{{ qGlyphStyle }}">?</span>{{ qLabel }}</button>
           </sc-if>
@@ -273,12 +300,15 @@ input::placeholder { color: #8a8f99; }
           <button onClick="{{ onTogglePicker }}" title="リアクションを追加" style="{{ plusStyle }}">＋</button>
         </div>
         <sc-if value="{{ pickerOpen }}" hint-placeholder-val="{{ false }}">
-          <div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 12px;border:1px solid var(--border,#303036);border-radius:999px;background:var(--surface2,#1f1f23);width:fit-content">
-            <button onClick="{{ onPickGood }}" title="Good" style="{{ pickGoodStyle }}"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" style="flex:0 0 auto"><path d="M1 21h4V9H1v12zM23 10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg></button>
-            <button onClick="{{ onPickBad }}" title="Bad" style="{{ pickBadStyle }}"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" style="flex:0 0 auto"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg></button>
-            <button onClick="{{ onPickQ }}" title="疑問" style="{{ pickQStyle }}"><span style="display:inline-block;transform:rotate(-8deg)">?</span></button>
-            <button onClick="{{ onPickXq }}" title="驚き" style="{{ pickXqStyle }}"><span style="display:inline-block;transform:rotate(-8deg)">!?</span></button>
-            <button onClick="{{ onPickMu }}" title="音ネタ" style="{{ pickMuStyle }}"><span style="display:inline-block;transform:rotate(-8deg)">♪</span></button>
+          <div style="display:flex;align-items:center;gap:3px;margin-top:10px;padding:8px 14px;border:1px solid var(--border,#31343f);border-radius:999px;background:var(--surface2,#232630);width:fit-content;flex-wrap:wrap">
+            <button onClick="{{ onPickGood }}" title="Good" style="{{ pickGoodStyle }}"><span style="display:flex"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="flex:0 0 auto"><path d="M1 21h4V9H1v12zM23 10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg></span></button>
+            <button onClick="{{ onPickBad }}" title="Bad" style="{{ pickBadStyle }}"><span style="display:flex;transform:rotate(5deg)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="flex:0 0 auto"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg></span></button>
+            <button onClick="{{ onPickKusa }}" title="草" style="{{ pickKusaStyle }}"><span style="display:inline-block;transform:rotate(3deg)">草</span></button>
+            <button onClick="{{ onPickKami }}" title="神" style="{{ pickKamiStyle }}"><span style="display:inline-block;-webkit-text-stroke:0.04em #F7C948">神</span></button>
+            <button onClick="{{ onPickNaki }}" title="泣" style="{{ pickNakiStyle }}"><span style="display:inline-block;transform:rotate(10deg);-webkit-text-stroke:0.04em #5CB3F5">泣</span></button>
+            <button onClick="{{ onPickQ }}" title="疑問" style="{{ pickQStyle }}"><span style="display:inline-block;transform:rotate(-10deg);-webkit-text-stroke:0.04em #F5A623">?</span></button>
+            <button onClick="{{ onPickXq }}" title="驚き" style="{{ pickXqStyle }}"><span style="display:inline-block;-webkit-text-stroke:0.04em #E5484D">!?</span></button>
+            <button onClick="{{ onPickMu }}" title="音ネタ" style="{{ pickMuStyle }}"><span style="display:inline-block;transform:rotate(-12deg);-webkit-text-stroke:0.04em #D6409F">♪</span></button>
           </div>
         </sc-if>
         <h1 style="margin:14px 0 4px;font-size:19px;font-weight:700;line-height:1.5;color:var(--text,#efeff1)">{{ watchTitle }}</h1>
@@ -352,16 +382,25 @@ input::placeholder { color: #8a8f99; }
                   <span style="display:flex;align-items:center;gap:3px;color:#2FAD62"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="flex:0 0 auto"><path d="M1 21h4V9H1v12zM23 10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg><span style="color:var(--text2,#adadb8)">{{ r.goodCount }}</span></span>
                 </sc-if>
                 <sc-if value="{{ r.hasBad }}" hint-placeholder-val="{{ false }}">
-                  <span style="display:flex;align-items:center;gap:3px;color:#6C8EE3"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="flex:0 0 auto"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg><span style="color:var(--text2,#adadb8)">{{ r.badCount }}</span></span>
+                  <span style="display:flex;align-items:center;gap:3px;color:#6C8EE3"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" style="flex:0 0 auto;transform:rotate(5deg)"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></svg><span style="color:var(--text2,#adadb8)">{{ r.badCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasKusa }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:3px"><span style="color:#57C15A;font-weight:900;display:inline-block;transform:rotate(3deg)">草</span><span>{{ r.kusaCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasKami }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:3px"><span style="color:#F7C948;font-weight:900;display:inline-block;-webkit-text-stroke:0.03em #F7C948">神</span><span>{{ r.kamiCount }}</span></span>
+                </sc-if>
+                <sc-if value="{{ r.hasNaki }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:3px"><span style="color:#5CB3F5;font-weight:900;display:inline-block;transform:rotate(10deg);-webkit-text-stroke:0.03em #5CB3F5">泣</span><span>{{ r.nakiCount }}</span></span>
                 </sc-if>
                 <sc-if value="{{ r.hasQ }}" hint-placeholder-val="{{ false }}">
-                  <span style="display:flex;align-items:center;gap:3px"><span style="color:#F5A623;font-weight:900;display:inline-block;transform:rotate(-8deg)">?</span><span>{{ r.qCount }}</span></span>
+                  <span style="display:flex;align-items:center;gap:3px"><span style="color:#F5A623;font-weight:900;display:inline-block;transform:rotate(-10deg);-webkit-text-stroke:0.03em #F5A623">?</span><span>{{ r.qCount }}</span></span>
                 </sc-if>
                 <sc-if value="{{ r.hasXq }}" hint-placeholder-val="{{ false }}">
-                  <span style="display:flex;align-items:center;gap:3px"><span style="color:#E5484D;font-weight:900;display:inline-block;transform:rotate(-8deg)">!?</span><span>{{ r.xqCount }}</span></span>
+                  <span style="display:flex;align-items:center;gap:3px"><span style="color:#E5484D;font-weight:900;display:inline-block;-webkit-text-stroke:0.03em #E5484D">!?</span><span>{{ r.xqCount }}</span></span>
                 </sc-if>
                 <sc-if value="{{ r.hasMu }}" hint-placeholder-val="{{ false }}">
-                  <span style="display:flex;align-items:center;gap:3px"><span style="color:#D6409F;font-weight:900;display:inline-block;transform:rotate(-8deg)">♪</span><span>{{ r.muCount }}</span></span>
+                  <span style="display:flex;align-items:center;gap:3px"><span style="color:#D6409F;font-weight:900;display:inline-block;transform:rotate(-12deg);-webkit-text-stroke:0.03em #D6409F">♪</span><span>{{ r.muCount }}</span></span>
                 </sc-if>
               </div>
             </div>
@@ -380,7 +419,7 @@ input::placeholder { color: #8a8f99; }
         <a href="https://x.com/indegnasen210" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;background:var(--surface2,#232630);border:1px solid var(--border,#31343f);color:var(--text,#f2f3f5);border-radius:999px;padding:9px 16px;font-size:13px;font-weight:700">布団ちゃんのX ↗</a>
       </div>
       <p style="margin:8px 0 0;font-size:13.5px;line-height:1.95;color:var(--text,#f2f3f5)">掲載内容に問題がある場合(権利者の方・ご本人からの削除のご依頼など)や、サイトへのご要望は、下記までご連絡ください。確認のうえ、速やかに対応いたします。</p>
-      <p style="margin:0;font-size:12.5px;color:var(--text2,#9aa0ad)">管理者: <a href="https://x.com/nitouqq" target="_blank" rel="noopener" style="color:var(--text2,#9aa0ad);text-decoration:underline">X @nitouqq</a></p>
+      <p style="margin:0;font-size:12.5px;color:var(--text2,#9aa0ad)">管理者: <a href="https://x.com/nitouqq" target="_blank" rel="noopener" style="color:var(--text2,#9aa0ad);text-decoration:underline">X @nitouqq</a> ・ <a href="/cdn-cgi/l/email-protection#cba5a2bfa4bebaba8baca6aaa2a7e5a8a4a6" style="color:var(--text2,#9aa0ad);text-decoration:underline"><span class="__cf_email__" data-cfemail="26484f524953575766414b474f4a0845494b">[email&#160;protected]</span></a></p>
       <p style="margin:14px 0 0;font-size:11.5px;line-height:1.8;color:var(--text2,#9aa0ad)">本サイトは布団ちゃんご本人および関係者とは無関係の個人運営です。TwitchはTwitch Interactive, Inc.の商標です。</p>
     </section>
   </sc-if>
@@ -407,7 +446,7 @@ input::placeholder { color: #8a8f99; }
   </footer>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/x-dc" data-dc-script data-props="{
   &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#EB550C&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#EB550C&quot;, &quot;#9146FF&quot;, &quot;#00A98F&quot;, &quot;#4C7DFF&quot;], &quot;section&quot;: &quot;テーマ&quot; },
   &quot;cardMin&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 300, &quot;min&quot;: 240, &quot;max&quot;: 380, &quot;step&quot;: 10, &quot;unit&quot;: &quot;px&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;レイアウト&quot; },
   &quot;autoplay&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;再生&quot; }
@@ -475,7 +514,7 @@ class Component extends DCLogic {
   };
   GOOD_W = 100;
   BAD_W = 100;
-  RX_KEYS = ['good', 'bad', 'q', 'xq', 'mu'];
+  RX_KEYS = ['good', 'bad', 'kusa', 'kami', 'naki', 'q', 'xq', 'mu'];
 
   gridRef = React.createRef();
   searchRef = React.createRef();
@@ -598,7 +637,8 @@ class Component extends DCLogic {
         counts[k] = {
           good: Number(c.good !== undefined ? c.good : c.g) || 0,
           bad: Number(c.bad !== undefined ? c.bad : c.b) || 0,
-          q: Number(c.q) || 0, xq: Number(c.xq) || 0, mu: Number(c.mu) || 0
+          q: Number(c.q) || 0, xq: Number(c.xq) || 0, mu: Number(c.mu) || 0,
+          kusa: Number(c.kusa) || 0, kami: Number(c.kami) || 0, naki: Number(c.naki) || 0
         };
       }
     }
@@ -636,9 +676,9 @@ class Component extends DCLogic {
   }
   cnt(id) {
     const c = this.state.counts[id] || {};
-    return { good: c.good || 0, bad: c.bad || 0, q: c.q || 0, xq: c.xq || 0, mu: c.mu || 0 };
+    return { good: c.good || 0, bad: c.bad || 0, q: c.q || 0, xq: c.xq || 0, mu: c.mu || 0, kusa: c.kusa || 0, kami: c.kami || 0, naki: c.naki || 0 };
   }
-  score(c) { const n = this.cnt(c.id); return n.good + n.bad + n.q + n.xq + n.mu; }
+  score(c) { const n = this.cnt(c.id); return n.good + n.bad + n.q + n.xq + n.mu + n.kusa + n.kami + n.naki; }
 
   // おすすめ順: 人気(視聴回数+リアクション)を経過日数で減衰 — 新しくて勢いのある物が上位
   hotScore(c) {
@@ -836,12 +876,18 @@ class Component extends DCLogic {
       qCount: String(n.q),
       xqCount: String(n.xq),
       muCount: String(n.mu),
+      kusaCount: String(n.kusa),
+      kamiCount: String(n.kami),
+      nakiCount: String(n.naki),
       watched: this.state.hist.includes(c.id),
       hasGood: n.good > 0,
       hasBad: n.bad > 0,
       hasQ: n.q > 0,
       hasXq: n.xq > 0,
       hasMu: n.mu > 0,
+      hasKusa: n.kusa > 0,
+      hasKami: n.kami > 0,
+      hasNaki: n.naki > 0,
       isNew: days <= 3,
       favIcon: faved ? '♥' : '♡',
       favStyle: {
@@ -1017,11 +1063,9 @@ class Component extends DCLogic {
       ? { ...pillStyle, border: '1px solid ' + color, color: color, fontWeight: 800 }
       : pillStyle;
     const pk = (on, color) => ({
-      width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer',
-      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0,
-      fontWeight: 900, fontSize: '16px', lineHeight: 1,
-      background: 'transparent', color: color,
-      border: on ? '2px solid ' + color : '2px solid transparent'
+      cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: '6px 8px', fontWeight: 900, fontSize: '19px', lineHeight: 1,
+      background: 'none', border: 'none', color: color
     });
     const host = (typeof location !== 'undefined' && location.hostname) || 'localhost';
     const onGithub = /\.github\.io$/.test(host);
@@ -1122,21 +1166,33 @@ class Component extends DCLogic {
       onQ: (e) => this.react(cur.id, 'q', e),
       onXq: (e) => this.react(cur.id, 'xq', e),
       onMu: (e) => this.react(cur.id, 'mu', e),
+      onKusa: (e) => this.react(cur.id, 'kusa', e),
+      onKami: (e) => this.react(cur.id, 'kami', e),
+      onNaki: (e) => this.react(cur.id, 'naki', e),
       goodLabel: String(n.good),
       badLabel: String(n.bad),
       qLabel: String(n.q),
       xqLabel: String(n.xq),
       muLabel: String(n.mu),
+      kusaLabel: String(n.kusa),
+      kamiLabel: String(n.kami),
+      nakiLabel: String(n.naki),
       goodStyle: rxOn(!!mine.good, '#2FAD62'),
       badStyle: rxOn(!!mine.bad, '#6C8EE3'),
       qStyle: rxOn(!!mine.q, '#F5A623'),
       xqStyle: rxOn(!!mine.xq, '#E5484D'),
       muStyle: rxOn(!!mine.mu, '#D6409F'),
+      kusaStyle: rxOn(!!mine.kusa, '#57C15A'),
+      kamiStyle: rxOn(!!mine.kami, '#F7C948'),
+      nakiStyle: rxOn(!!mine.naki, '#5CB3F5'),
       watchHasGood: n.good > 0,
       watchHasBad: n.bad > 0,
       watchHasQ: n.q > 0,
       watchHasXq: n.xq > 0,
       watchHasMu: n.mu > 0,
+      watchHasKusa: n.kusa > 0,
+      watchHasKami: n.kami > 0,
+      watchHasNaki: n.naki > 0,
       pickerOpen: this.state.pickerOpen,
       onTogglePicker: () => this.setState({ pickerOpen: !this.state.pickerOpen }),
       plusStyle: {
@@ -1145,21 +1201,30 @@ class Component extends DCLogic {
         color: 'var(--text, #efeff1)', fontSize: '16px', fontWeight: 700, cursor: 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, lineHeight: 1
       },
-      onPickGood: (e) => { this.react(cur.id, 'good', e); this.setState({ pickerOpen: false }); },
-      onPickBad: (e) => { this.react(cur.id, 'bad', e); this.setState({ pickerOpen: false }); },
-      onPickQ: (e) => { this.react(cur.id, 'q', e); this.setState({ pickerOpen: false }); },
-      onPickXq: (e) => { this.react(cur.id, 'xq', e); this.setState({ pickerOpen: false }); },
-      onPickMu: (e) => { this.react(cur.id, 'mu', e); this.setState({ pickerOpen: false }); },
+      onPickGood: (e) => { if (!mine.good) this.react(cur.id, 'good', e); this.setState({ pickerOpen: false }); },
+      onPickBad: (e) => { if (!mine.bad) this.react(cur.id, 'bad', e); this.setState({ pickerOpen: false }); },
+      onPickQ: (e) => { if (!mine.q) this.react(cur.id, 'q', e); this.setState({ pickerOpen: false }); },
+      onPickXq: (e) => { if (!mine.xq) this.react(cur.id, 'xq', e); this.setState({ pickerOpen: false }); },
+      onPickMu: (e) => { if (!mine.mu) this.react(cur.id, 'mu', e); this.setState({ pickerOpen: false }); },
+      onPickKusa: (e) => { if (!mine.kusa) this.react(cur.id, 'kusa', e); this.setState({ pickerOpen: false }); },
+      onPickKami: (e) => { if (!mine.kami) this.react(cur.id, 'kami', e); this.setState({ pickerOpen: false }); },
+      onPickNaki: (e) => { if (!mine.naki) this.react(cur.id, 'naki', e); this.setState({ pickerOpen: false }); },
       pickGoodStyle: pk(!!mine.good, '#2FAD62'),
       pickBadStyle: pk(!!mine.bad, '#6C8EE3'),
       pickQStyle: pk(!!mine.q, '#F5A623'),
       pickXqStyle: pk(!!mine.xq, '#E5484D'),
       pickMuStyle: pk(!!mine.mu, '#D6409F'),
+      pickKusaStyle: pk(!!mine.kusa, '#57C15A'),
+      pickKamiStyle: pk(!!mine.kami, '#F7C948'),
+      pickNakiStyle: pk(!!mine.naki, '#5CB3F5'),
       goodIconStyle: { display: 'flex', alignItems: 'center', color: '#2FAD62' },
-      badIconStyle: { display: 'flex', alignItems: 'center', color: '#6C8EE3' },
-      qGlyphStyle: { display: 'inline-block', transform: 'rotate(-8deg)', fontWeight: 900, fontSize: '15px', lineHeight: '1', color: '#F5A623' },
-      xqGlyphStyle: { display: 'inline-block', transform: 'rotate(-8deg)', fontWeight: 900, fontSize: '15px', lineHeight: '1', color: '#E5484D' },
-      muGlyphStyle: { display: 'inline-block', transform: 'rotate(-8deg)', fontWeight: 900, fontSize: '15px', lineHeight: '1', color: '#D6409F' },
+      badIconStyle: { display: 'flex', alignItems: 'center', color: '#6C8EE3', transform: 'rotate(5deg)' },
+      qGlyphStyle: { display: 'inline-block', transform: 'rotate(-10deg)', fontWeight: 900, fontSize: '15px', lineHeight: '1', color: '#F5A623', WebkitTextStroke: '0.04em #F5A623' },
+      xqGlyphStyle: { display: 'inline-block', fontWeight: 900, fontSize: '15px', lineHeight: '1', color: '#E5484D', WebkitTextStroke: '0.04em #E5484D' },
+      muGlyphStyle: { display: 'inline-block', transform: 'rotate(-12deg)', fontWeight: 900, fontSize: '15px', lineHeight: '1', color: '#D6409F', WebkitTextStroke: '0.04em #D6409F' },
+      kusaGlyphStyle: { display: 'inline-block', transform: 'rotate(3deg)', fontWeight: 900, fontSize: '15px', lineHeight: '1', color: '#57C15A' },
+      kamiGlyphStyle: { display: 'inline-block', fontWeight: 900, fontSize: '15px', lineHeight: '1', color: '#F7C948', WebkitTextStroke: '0.04em #F7C948' },
+      nakiGlyphStyle: { display: 'inline-block', transform: 'rotate(10deg)', fontWeight: 900, fontSize: '15px', lineHeight: '1', color: '#5CB3F5', WebkitTextStroke: '0.04em #5CB3F5' },
       onWatchFav: () => this.toggleFav(cur.id),
       watchFavStyle: favs.includes(cur.id)
         ? { ...pillStyle, background: accent, border: '1px solid transparent', color: '#ffffff' }
