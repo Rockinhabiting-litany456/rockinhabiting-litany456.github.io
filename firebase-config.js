@@ -17,4 +17,4 @@ window.HUTONCLIPS_DB_URL = "https://huton-fan-default-rtdb.asia-southeast1.fireb
 // 例: window.HUTONFAN_GOATCOUNTER = "https://huton-fan.goatcounter.com/count";
 // 空("")のままなら計測なし(サイトは普通に動きます)。
 // ============================================================
-window.HUTONFAN_GOATCOUNTER = "";
+window.HUTONFAN_GOATCOUNTER = "https://nitou.goatcounter.com/count";
